@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deckterm</title>
+  </head>
+  <body>
+    <aside id="sidebar">
+      <div class="side-top">
+        <button id="btn-home" title="Mostrar / ocultar terminal" data-i18n-title="Mostrar / ocultar terminal" aria-label="Inicio">
+          <svg viewBox="0 0 120 120" width="20" height="20" aria-hidden="true">
+            <rect x="8" y="8" width="104" height="104" rx="26" fill="none" stroke="currentColor" stroke-width="9" />
+            <path d="M38 44 L62 60 L38 76" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="new-tab">
+          <button id="btn-new" title="Nueva pestaña (perfil por defecto)" data-i18n-title="Nueva pestaña (perfil por defecto)" data-i18n="+ Nueva">+ Nueva</button>
+          <button id="btn-menu" title="Elegir perfil" data-i18n-title="Elegir perfil" aria-haspopup="menu">▾</button>
+          <div id="profile-menu" role="menu" hidden></div>
+        </div>
+      </div>
+      <div class="side-search">
+        <input id="tab-search" type="search" placeholder="Buscar pestañas…" data-i18n-placeholder="Buscar pestañas…" autocomplete="off" spellcheck="false" />
+        <button id="btn-view" title="Vista y opciones" data-i18n-title="Vista y opciones" aria-label="Vista">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M2 4.5h7M12 4.5h2M2 11.5h2M7 11.5h7" /><circle cx="10.5" cy="4.5" r="1.6" /><circle cx="5.5" cy="11.5" r="1.6" />
+          </svg>
+        </button>
+      </div>
+      <div id="tabs" role="tablist"></div>
+      <div class="side-bottom">
+        <button id="btn-settings" title="Configuración (Ctrl+,)" data-i18n-title="Configuración (Ctrl+,)" data-i18n="⚙ Configuración">⚙ Configuración</button>
+      </div>
+    </aside>
+    <section id="stage">
+    <div id="pane-bar"></div>
+    <main id="terminals">
+      <div id="empty">
+        <svg class="logo" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" style="stop-color: var(--accent)" />
+              <stop offset="1" stop-color="#bb9af7" />
+            </linearGradient>
+          </defs>
+          <rect class="frame" x="8" y="8" width="104" height="104" rx="26" fill="none" stroke="url(#lg)" stroke-width="3" pathLength="100" />
+          <path class="chev" d="M38 44 L62 60 L38 76" fill="none" stroke="url(#lg)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+          <rect class="cursor" x="70" y="72" width="22" height="7" rx="3.5" fill="url(#lg)" />
+        </svg>
+        <h1>Deckterm</h1>
+        <p class="tagline" data-i18n="Abre un perfil para empezar">Abre un perfil para empezar</p>
+        <div id="empty-list"></div>
+        <p class="hint"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> <span data-i18n="nueva pestaña">nueva pestaña</span> · <kbd>Ctrl</kbd>+<kbd>,</kbd> <span data-i18n="configuración">configuración</span></p>
+      </div>
+    </main>
+    </section>
+    <section id="settings" hidden></section>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+# dependencias y compilación
+node_modules/
+dist/
+target/
+src-tauri/gen/schemas/
+
+# sistema y editores
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
