@@ -1,0 +1,65 @@
+# Publica instaladores para Windows, macOS y Linux al subir una etiqueta "vX.Y.Z".
+# Crea un release en BORRADOR: revísalo en GitHub y publícalo cuando esté listo.
+#
+#   git tag v0.1.0 && git push origin v0.1.0
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Windows,        platform: windows-latest, args: "" }
+          - { name: macOS (arm64),  platform: macos-latest,   args: "--target aarch64-apple-darwin" }
+          - { name: macOS (x64),    platform: macos-latest,   args: "--target x86_64-apple-darwin" }
+          - { name: Linux,          platform: ubuntu-22.04,   args: "" }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev \
+            libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ startsWith(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: npm ci
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Deckterm ${{ github.ref_name }}"
+          releaseBody: |
+            Descarga el instalador para tu sistema en la sección **Assets**. / Download the installer for your system from the **Assets** section.
+
+            - Windows: `.msi` / `.exe`
+            - macOS: `.dmg` (Apple Silicon: `aarch64`, Intel: `x64`)
+            - Linux: `.deb` / `.rpm` / `.AppImage`
+
+            Los instaladores no están firmados todavía: Windows (SmartScreen) y macOS (Gatekeeper) pueden mostrar una advertencia. / Installers are not code-signed yet: Windows (SmartScreen) and macOS (Gatekeeper) may show a warning.
+          releaseDraft: true
+          prerelease: true
+          args: ${{ matrix.args }}
